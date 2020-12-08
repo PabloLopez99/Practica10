@@ -57,7 +57,6 @@ public class MainFrame extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenu = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,9 +85,6 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu.add(openMenu);
 
         menuBar.add(fileMenu);
-
-        editMenu.setText("Edit");
-        menuBar.add(editMenu);
 
         setJMenuBar(menuBar);
 
@@ -204,7 +200,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton compressButton;
-    private javax.swing.JMenu editMenu;
     private javax.swing.JScrollPane fileListScrollPane;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JList<String> filesList;
