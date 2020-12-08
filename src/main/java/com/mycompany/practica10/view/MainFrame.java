@@ -6,6 +6,7 @@
 package com.mycompany.practica10.view;
 
 import com.mycompany.practica10.model.ImageHandler;
+import java.awt.Cursor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class MainFrame extends javax.swing.JFrame {
     private JFileChooser fc;
     private JFileChooser fs;
     private FileNameExtensionFilter filter;
+    private ImageHandler ih;
     private DefaultListModel tableModel=new DefaultListModel();
     public MainFrame() {
         initComponents();
@@ -128,36 +130,43 @@ public class MainFrame extends javax.swing.JFrame {
         if(res==JFileChooser.APPROVE_OPTION){
             folder = fc.getSelectedFile();
             showFolderContent(folder);
-           //openImageActions(fc.getSelectedFile());
-           
         }
         
     }//GEN-LAST:event_openMenuActionPerformed
 
     private void compressButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compressButtonActionPerformed
         fs = new JFileChooser();
+        fs.setSelectedFile(new File(folder.getName()));
         fs.setMultiSelectionEnabled(true);
         int res = fs.showSaveDialog(null);
         if(res==JFileChooser.APPROVE_OPTION){
-            //try {
-                System.out.println(fs.getSelectedFile().getAbsolutePath());
-              
-              
-            try {
-                List<File> list = new LinkedList<>();
-                ImageHandler.compressImage(fs.getSelectedFile().getAbsolutePath(),getSelectedFiles(filesList.getSelectedValuesList()));
-                // } catch (FileNotFoundException ex) {
-                //     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                // }
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-         
+            
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            
+            LoadingFrame lf= new LoadingFrame();
+            lf.setParentFrame(this);
+            lf.setVisible(true);
+            ih = new ImageHandler(fs.getSelectedFile().getAbsolutePath(),getSelectedFiles(filesList.getSelectedValuesList()),lf);
+            ih.execute();
+           
+            //ImageHandler.compressImage(fs.getSelectedFile().getAbsolutePath(),getSelectedFiles(filesList.getSelectedValuesList()));
+           
+           
         }
+          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_compressButtonActionPerformed
     private void showFolderContent(File folder){
-        filesList.setListData(folder.list());
-    }
+        File[] listOfFiles = folder.listFiles();
+        List<String> listOfFileNames = new LinkedList<String>();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
+                listOfFileNames.add(listOfFiles[i].getName());
+            };
+            filesList.setListData(listOfFileNames.toArray(new String[0]));
+        
+        }
+       //  filesList.setListData(folder.list()); Con este método también se añaden las carpetas
+    }    
     /**
      * @param args the command line arguments
      */
@@ -215,5 +224,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
       
         return ret;
+    }
+    public void cancelTask(){
+        ih.cancel(true);
     }
 }
