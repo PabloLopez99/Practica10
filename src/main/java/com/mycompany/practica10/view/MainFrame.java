@@ -70,9 +70,15 @@ public class MainFrame extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        filesList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                filesListValueChanged(evt);
+            }
+        });
         fileListScrollPane.setViewportView(filesList);
 
         compressButton.setText("Comprimir");
+        compressButton.setEnabled(false);
         compressButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 compressButtonActionPerformed(evt);
@@ -109,7 +115,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        openMenu.setText("Open directory");
+        openMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        openMenu.setText("Abrir Carpeta");
         openMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openMenuActionPerformed(evt);
@@ -117,7 +124,9 @@ public class MainFrame extends javax.swing.JFrame {
         });
         fileMenu.add(openMenu);
 
-        compress.setText("Compress");
+        compress.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        compress.setText("Comprimir");
+        compress.setEnabled(false);
         compress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 compressActionPerformed(evt);
@@ -126,7 +135,7 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu.add(compress);
         fileMenu.add(jSeparator1);
 
-        exit.setText("Exit");
+        exit.setText("Salir");
         exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitActionPerformed(evt);
@@ -233,6 +242,11 @@ public class MainFrame extends javax.swing.JFrame {
         }
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_compressActionPerformed
+
+    private void filesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_filesListValueChanged
+        compressButton.setEnabled(true);
+        compress.setEnabled(true);
+    }//GEN-LAST:event_filesListValueChanged
     private void showFolderContent(File folder){
         File[] listOfFiles = folder.listFiles();
         List<String> listOfFileNames = new LinkedList<String>();
