@@ -59,6 +59,8 @@ public class MainFrame extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenu = new javax.swing.JMenuItem();
+        compress = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         exit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -114,6 +116,15 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         fileMenu.add(openMenu);
+
+        compress.setText("Compress");
+        compress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                compressActionPerformed(evt);
+            }
+        });
+        fileMenu.add(compress);
+        fileMenu.add(jSeparator1);
 
         exit.setText("Exit");
         exit.addActionListener(new java.awt.event.ActionListener() {
@@ -186,7 +197,7 @@ public class MainFrame extends javax.swing.JFrame {
            
            
         }
-          this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_compressButtonActionPerformed
 
     private void openDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDirectoryActionPerformed
@@ -200,6 +211,28 @@ public class MainFrame extends javax.swing.JFrame {
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
          System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
+
+    private void compressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compressActionPerformed
+        fs = new JFileChooser();
+        fs.setSelectedFile(new File(folder.getName()));
+        fs.setMultiSelectionEnabled(true);
+        int res = fs.showSaveDialog(null);
+        if(res==JFileChooser.APPROVE_OPTION){
+            
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            
+            LoadingFrame lf= new LoadingFrame();
+            lf.setParentFrame(this);
+            lf.setVisible(true);
+            ih = new ImageHandler(fs.getSelectedFile().getAbsolutePath(),getSelectedFiles(filesList.getSelectedValuesList()),lf);
+            ih.execute();
+           
+            //ImageHandler.compressImage(fs.getSelectedFile().getAbsolutePath(),getSelectedFiles(filesList.getSelectedValuesList()));
+           
+           
+        }
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_compressActionPerformed
     private void showFolderContent(File folder){
         File[] listOfFiles = folder.listFiles();
         List<String> listOfFileNames = new LinkedList<String>();
@@ -248,12 +281,14 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem compress;
     private javax.swing.JButton compressButton;
     private javax.swing.JMenuItem exit;
     private javax.swing.JScrollPane fileListScrollPane;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JList<String> filesList;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JButton openDirectory;
     private javax.swing.JMenuItem openMenu;
